@@ -7,17 +7,12 @@
 
 protocol TheMovieDBServiceProtocol: AnyObject {
     func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> NowPlayingMovies
-    func fetchMovieDetails(_ model: MovieDetailsRequestModel) async throws -> MovieDetails
     func searchMovie(_ model: SearchMovieRequestModel) async throws -> NowPlayingMovies
 }
 
 final class TheMovieDBService: BaseNetworkService<MovieRouter>, TheMovieDBServiceProtocol {
     func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> NowPlayingMovies {
         return try await request(NowPlayingMovies.self, router: .fetchNowPlayingMovies(model: model))
-    }
-    
-    func fetchMovieDetails(_ model: MovieDetailsRequestModel) async throws -> MovieDetails {
-        return try await request(MovieDetails.self, router: .fetchMovieDetails(model: model))
     }
     
     func searchMovie(_ model: SearchMovieRequestModel) async throws -> NowPlayingMovies {

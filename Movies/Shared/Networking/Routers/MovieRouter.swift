@@ -9,14 +9,11 @@ import Foundation
 
 enum MovieRouter: URLRequestConvertible {
     case fetchNowPlayingMovies(model: NowPlayingMoviesRequestModel)
-    case fetchMovieDetails(model: MovieDetailsRequestModel)
     case searchMovie(model: SearchMovieRequestModel)
     
     private var method: String {
         switch self {
         case .fetchNowPlayingMovies:
-            return "GET"
-        case .fetchMovieDetails:
             return "GET"
         case .searchMovie:
             return "GET"
@@ -36,16 +33,6 @@ enum MovieRouter: URLRequestConvertible {
             }
             if let region = model.region {
                 items.append(URLQueryItem(name: "region", value: region))
-            }
-            return items
-        case let .fetchMovieDetails(model):
-            var items: [URLQueryItem] = []
-            
-            if let appendToResponse = model.appendToResponse {
-                items.append(URLQueryItem(name: "append_to_response", value: appendToResponse))
-            }
-            if let language = model.language {
-                items.append(URLQueryItem(name: "language", value: language))
             }
             return items
         case let .searchMovie(model):
@@ -78,8 +65,6 @@ enum MovieRouter: URLRequestConvertible {
         switch self {
         case .fetchNowPlayingMovies:
             return "/movie/now_playing"
-        case let .fetchMovieDetails(model):
-            return "/movie/\(model.movieId)"
         case .searchMovie:
             return "/search/movie"
         }
