@@ -16,7 +16,7 @@ struct NewPlayingMoviesCellModel {
     init?(movie: Movie, favorite: UIImage?) {
         guard let title = movie.title else { return nil }
         self.title = title
-        let baseURL = AppConstants.TheMovieDBApi.baseURL
+        let baseURL = AppConstants.TheMovieDBApi.imageBaseURL
         
         if let posterPath = movie.posterPath {
             let urlString = baseURL + posterPath

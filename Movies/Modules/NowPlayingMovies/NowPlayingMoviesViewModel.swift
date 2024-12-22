@@ -71,13 +71,22 @@ final class NowPlayingMoviesViewModel: NowPlayingMoviesProtocol {
         let voteAverage = movie.voteAverage
         let rating: String? = if let voteAverage { "\(voteAverage)" } else { nil }
         
+        let posterUrl: URL?
+        
+        if let posterPath = movie.posterPath {
+            let urlString = AppConstants.TheMovieDBApi.imageBaseURL + posterPath
+            posterUrl = URL(string: urlString)
+        } else {
+            posterUrl = nil
+        }
+        
         let movieDetails = MovieDetailsViewData(
             id: movie.id,
             title: movie.title,
             releaseDate: movie.releaseDate,
             rating: rating,
             overview: movie.overview,
-            posterImageURL: nil) // movie.posterPath)
+            posterImageURL: posterUrl)
         
         return movieDetails
     }

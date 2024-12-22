@@ -41,8 +41,7 @@ class BaseNetworkService<Router: URLRequestConvertible> {
     func request<T: Decodable>(_ returnType: T.Type, router: Router) async throws -> T {
         let request = try router.makeURLRequest()
         let (data, response) = try await urlSession.data(for: request)
-//        let dataString = String(data: data, encoding: .utf8) ?? ""
-//        print(dataString)
+
         try handleResponse(data: data, response: response)
         
         let decoder = JSONDecoder()
