@@ -13,18 +13,10 @@ struct NewPlayingMoviesCellModel {
     let movieImageURL: URL?
     let favorite: UIImage?
     
-    init?(movie: Movie, favorite: UIImage?) {
-        guard let title = movie.title else { return nil }
+    init?(title: String?, movieImageURL: URL?, favorite: UIImage?) {
+        guard let title else { return nil }
         self.title = title
-        let baseURL = AppConstants.TheMovieDBApi.imageBaseURL
-        
-        if let posterPath = movie.posterPath {
-            let urlString = baseURL + posterPath
-            movieImageURL = URL(string: urlString)
-        } else {
-            movieImageURL = nil
-        }
-        
+        self.movieImageURL = movieImageURL
         self.favorite = favorite
     }
 }

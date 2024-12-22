@@ -58,7 +58,18 @@ final class NowPlayingMoviesViewModel: NowPlayingMoviesProtocol {
     func getMovieCellModel(index: Int) -> NewPlayingMoviesCellModel? {
         guard let movie = getMovie(index: index) else { return nil }
         let favoriteImage = getFavoriteMovieImage(movieId: movie.id)
-        let item = NewPlayingMoviesCellModel(movie: movie, favorite: favoriteImage)
+        
+        let baseURL = AppConstants.TheMovieDBApi.imageW92BaseURL
+        let movieImageURL: URL?
+        
+        if let posterPath = movie.posterPath {
+            let urlString = baseURL + posterPath
+            movieImageURL = URL(string: urlString)
+        } else {
+            movieImageURL = nil
+        }
+        
+        let item = NewPlayingMoviesCellModel(title: movie.title, movieImageURL: movieImageURL, favorite: favoriteImage)
         return item
     }
     
@@ -74,7 +85,7 @@ final class NowPlayingMoviesViewModel: NowPlayingMoviesProtocol {
         let posterUrl: URL?
         
         if let posterPath = movie.posterPath {
-            let urlString = AppConstants.TheMovieDBApi.imageBaseURL + posterPath
+            let urlString = AppConstants.TheMovieDBApi.imageOriginalBaseURL + posterPath
             posterUrl = URL(string: urlString)
         } else {
             posterUrl = nil
