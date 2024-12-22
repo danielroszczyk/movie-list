@@ -41,7 +41,8 @@ final class NowPlayingMoviesViewModel: NowPlayingMoviesProtocol {
     func fetchNowPlayingMovies() async {
         do {
             if currentPage < nowPlayingMovies?.totalPages ?? 1 {
-                let nowPlayingMovies = try await movieService.fetchNowPlayingMovies(page: currentPage + 1, language: "en-US")
+                let requestModel = NowPlayingMoviesRequestModel(page: currentPage + 1)
+                let nowPlayingMovies = try await movieService.fetchNowPlayingMovies(requestModel)
                 
                 if nowPlayingMovies.results.count > 0 {
                     movies.append(contentsOf: nowPlayingMovies.results)
