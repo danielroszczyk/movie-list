@@ -23,12 +23,21 @@ final class NewPlayingMoviesTableViewCell: UITableViewCell {
     weak var delegate: NewPlayingMoviesTableViewCellDelegate?
     var indexPath: IndexPath?
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+        favoriteImageView.image = nil
+        posterImageView.image = nil
+    }
+    
     func configure(_ model: NewPlayingMoviesCellModel, indexPath: IndexPath) {
         titleLabel.text = model.title
         favoriteImageView.image = model.favorite
         
         if let imageURL = model.movieImageURL {
             posterImageView.kf.setImage(with: imageURL)
+        } else {
+            posterImageView.image = nil
         }
         self.indexPath = indexPath
     }
