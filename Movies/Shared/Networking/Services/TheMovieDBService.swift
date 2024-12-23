@@ -6,16 +6,16 @@
 //
 
 protocol TheMovieDBServiceProtocol: AnyObject {
-    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> NowPlayingMovies
-    func searchMovie(_ model: SearchMovieRequestModel) async throws -> NowPlayingMovies
+    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> MoviesResponse
+    func searchMovie(_ model: SearchMovieRequestModel) async throws -> MoviesResponse
 }
 
 final class TheMovieDBService: BaseNetworkService<MovieRouter>, TheMovieDBServiceProtocol {
-    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> NowPlayingMovies {
-        return try await request(NowPlayingMovies.self, router: .fetchNowPlayingMovies(model: model))
+    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> MoviesResponse {
+        return try await request(MoviesResponse.self, router: .fetchNowPlayingMovies(model: model))
     }
     
-    func searchMovie(_ model: SearchMovieRequestModel) async throws -> NowPlayingMovies {
-        return try await request(NowPlayingMovies.self, router: .searchMovie(model: model))
+    func searchMovie(_ model: SearchMovieRequestModel) async throws -> MoviesResponse {
+        return try await request(MoviesResponse.self, router: .searchMovie(model: model))
     }
 }

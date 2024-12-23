@@ -8,6 +8,7 @@
 import UIKit
 
 final class NowPlayingMoviesViewController: UIViewController {
+    private let searchBar = UISearchBar()
     private let tableView = UITableView()
     private let cellIdentifier = "NewPlayingMoviesTableViewCell"
     private let viewModel: NowPlayingMoviesProtocol
@@ -29,24 +30,38 @@ final class NowPlayingMoviesViewController: UIViewController {
         safeArea = view.layoutMarginsGuide
         navigationItem.title = "Now playing movie list"
         viewModel.delegate = self
+        setupConstraints()
+        setupSearchBar()
         setupTableView()
         loadData()
     }
-
-    private func setupTableView() {
+    
+    private func setupConstraints() {
+        view.addSubview(searchBar)
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        if let safeArea {
+            searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
+        } else {
+            searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        }
+        searchBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        searchBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        if let safeArea {
-            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
-        } else {
-            tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        }
+        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        
-        let cellNib = UINib(nibName: cellIdentifier, bundle: nil)
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    private func setupSearchBar() {
+        searchBar.placeholder = " Search..."
+        searchBar.delegate = self
+    }
 
+    private func setupTableView() {
+        let cellNib = UINib(nibName: cellIdentifier, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: cellIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
@@ -101,10 +116,12 @@ extension NowPlayingMoviesViewController: UITableViewDelegate {
 
 extension NowPlayingMoviesViewController: NewPlayingMoviesCellModelDelegate {
     func reloadCell(index: Int) {
-        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        }
     }
     
-    func fetchedData() {
+    func reloadData() {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }
@@ -121,5 +138,11 @@ extension NowPlayingMoviesViewController: NewPlayingMoviesTableViewCellDelegate 
 extension NowPlayingMoviesViewController: MovieDetailsDelegate {
     func didTapFavorite(movieId: Int, isFavorite: Bool) {
         viewModel.didTapFavorite(movieId: movieId, isFavorite: isFavorite)
+    }
+}
+
+extension NowPlayingMoviesViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
+        viewModel.movieSearched(text: textSearched)
     }
 }

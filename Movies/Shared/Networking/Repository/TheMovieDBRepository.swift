@@ -6,8 +6,8 @@
 //
 
 protocol TheMovieDBRepositoryProtocol: AnyObject {
-    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> NowPlayingMovies
-    func searchMovie(_ model: SearchMovieRequestModel) async throws -> NowPlayingMovies
+    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> MoviesResponse
+    func searchMovie(_ model: SearchMovieRequestModel) async throws -> MoviesResponse
 }
 
 final class TheMovieDBRepository: TheMovieDBRepositoryProtocol {
@@ -17,11 +17,11 @@ final class TheMovieDBRepository: TheMovieDBRepositoryProtocol {
         self.networkService = networkService
     }
     
-    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> NowPlayingMovies {
+    func fetchNowPlayingMovies(_ model: NowPlayingMoviesRequestModel) async throws -> MoviesResponse {
         return try await networkService.fetchNowPlayingMovies(model)
     }
     
-    func searchMovie(_ model: SearchMovieRequestModel) async throws -> NowPlayingMovies {
+    func searchMovie(_ model: SearchMovieRequestModel) async throws -> MoviesResponse {
         return try await networkService.searchMovie(model)
     }
 }
